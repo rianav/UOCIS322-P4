@@ -62,7 +62,7 @@ def _calc_times():
     # and control distance is fixed to 200
     # You should get these from the webpage!
 
-    # now takes in time and date inputted by user
+    # now takes in distance, time and date inputted by user
     open_time = acp_times.open_time(km, dist, arrow.get(start_time)).format('YYYY-MM-DDTHH:mm')
     close_time = acp_times.close_time(km, dist, arrow.get(start_time)).format('YYYY-MM-DDTHH:mm')
     result = {"open": open_time, "close": close_time}

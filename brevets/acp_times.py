@@ -33,31 +33,35 @@ def open_time(control_dist_km, brevet_dist_km, brevet_start_time):
        A date object indicating the control open time.
        This will be in the same time zone as the brevet start time.
     """
+    if control_dist_km == 0:
+        # first control opens at start time
+        return brevet_start_time
+
     hr200, mins200 = get_hrs_mins(200, 34)
     hr400, mins400 = get_hrs_mins(200, 32)
     hr600, mins600 = get_hrs_mins(200, 30)
     hr1000, mins1000 = get_hrs_mins(200, 28)
-    if brevet_dist_km <= 200:
+    if control_dist_km <= 200:
         # max speed = 34
         hr, mins = get_hrs_mins(control_dist_km, 34)
-    elif brevet_dist_km <= 400:
+    elif control_dist_km <= 400:
         # max speed = 32
         hr, mins = get_hrs_mins(control_dist_km - 200, 32)
         hr += hr200
         mins += mins200
-    elif brevet_dist_km <= 600:
+    elif control_dist_km <= 600:
         # max speed = 30
         hr, mins = get_hrs_mins(control_dist_km - 400, 30)
         hr += hr400 + hr200
         mins += mins400 + mins200
-    elif brevet_dist_km <= 1000:
+    elif control_dist_km <= 1000:
         # max speed = 28
         hr, mins = get_hrs_mins(control_dist_km - 600, 28)
         hr += hr600 + hr400 + hr200
         mins += mins600 + mins400 + mins200
     else:
         # max speed = 26
-        hr, mins, get_hrs_mins(control_dist_km - 1000, 26)
+        hr, mins = get_hrs_mins(control_dist_km - 1000, 26)
         hr += hr1000 + hr600 + hr400 + hr200
         mins += hr1000 + mins600 + mins400 + mins200
 
@@ -78,6 +82,19 @@ def close_time(control_dist_km, brevet_dist_km, brevet_start_time):
        A date object indicating the control close time.
        This will be in the same time zone as the brevet start time.
     """
+    if control_dist_km == 0:
+        return brevet_start_time.shift(hours=1)
+    if control_dist_km >= brevet_dist_km:
+        if brevet_dist_km == 200:
+            return brevet_start_time.shift(hours=13, minutes=30)
+        elif brevet_dist_km == 300:
+            return brevet_start_time.shift(hours=20)
+        elif brevet_dist_km == 400:
+            return brevet_start_time.shift(hours=27)
+        elif brevet_dist_km == 600:
+            return brevet_start_time.shift(hours=40)
+        elif brevet_dist_km == 1000:
+            return brevet_start_time.shift(hours=75)
     hr600, mins600 = get_hrs_mins(600, 15)
     hr1000, mins1000 = get_hrs_mins(1000, 11.428)
     if control_dist_km <= 600:
