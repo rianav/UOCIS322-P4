@@ -97,7 +97,11 @@ def close_time(control_dist_km, brevet_dist_km, brevet_start_time):
             return brevet_start_time.shift(hours=75)
     hr600, mins600 = get_hrs_mins(600, 15)
     hr1000, mins1000 = get_hrs_mins(1000, 11.428)
-    if control_dist_km <= 600:
+    if control_dist_km <= 60:
+        hr, mins = get_hrs_mins(control_dist_km, 20)
+        hr += 1
+        return brevet_start_time.shift(hours=hr, minutes=mins)
+    elif control_dist_km <= 600:
         # min speed = 15
         # max speed = 30
         hr, mins = get_hrs_mins(control_dist_km, 15)
